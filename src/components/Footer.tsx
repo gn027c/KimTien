@@ -168,7 +168,7 @@ const Footer: React.FC = () => {
               }}
               className="space-y-3"
             >
-              {[{to: '/thoa-thuan-su-dung', label: 'Thỏa thuận sử dụng'}, {to: '/chinh-sach-bao-mat', label: 'Chính sách bảo mật'}, {to: '/chinh-sach', label: 'Chính sách & hỗ trợ khách hàng'}].map((item, idx) => (
+              {[{to: '/thoa-thuan-su-dung', label: 'Thỏa thuận sử dụng'}, {to: '/chinh-sach-bao-mat', label: 'Chính sách bảo mật'}, {to: '/chinh-sach', label: 'Chính sách & Hỗ trợ khách hàng'}].map((item, idx) => (
                 <motion.li
                   key={item.to}
                   variants={{ hidden: { opacity: 0, x: -16 }, visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: 'easeOut' } } }}

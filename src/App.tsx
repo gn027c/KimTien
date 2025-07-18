@@ -20,6 +20,7 @@ import TermsOfUsePage from './pages/TermsOfUse';
 import PrivacyPolicyPage from './pages/PrivacyPolicy';
 import QuotePage from './pages/Quote';
 import ServiceDetailPage from './pages/ServiceDetail';
+import ChinhSachPage from './pages/Policy';
 
 // Register service worker for offline support
 // registerServiceWorker();
@@ -57,6 +58,7 @@ function App() {
               <Route path="/chinh-sach-bao-mat" element={<PrivacyPolicyPage />} />
               <Route path="/bao-gia" element={<QuotePage />} />
               <Route path="/dich-vu/:id" element={<ServiceDetailPage />} />
+              <Route path="/chinh-sach" element={<ChinhSachPage />} />
               
               {/* Policy/Info pages */}
               <Route 

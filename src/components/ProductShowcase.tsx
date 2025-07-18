@@ -90,7 +90,7 @@ const ProductShowcase: React.FC = () => {
         whileTap={{ scale: 0.98 }}
         style={{ willChange: 'transform, box-shadow' }}
         className="w-full group relative cursor-pointer bg-white rounded-2xl shadow-md max-h-[280px]"
-        onClick={() => window.location.href = '/bao-gia'}
+        onClick={() => window.location.href = `/bao-gia?product=${encodeURIComponent(item.title)}`}
       >
         {/* Badges: top-left and top-right, with padding */}
         <div className="absolute top-0 left-0 flex flex-col gap-2 p-2 z-20">
@@ -130,7 +130,7 @@ const ProductShowcase: React.FC = () => {
   const FeaturedSpotlightCard = ({ item }: { item: ProductShowcaseItem }) => (
     <div 
       className="relative h-full w-full rounded-3xl overflow-hidden shadow-xl cursor-pointer group"
-      onClick={() => window.location.href = "/bao-gia"}
+      onClick={() => window.location.href = `/bao-gia?product=${encodeURIComponent(item.title)}`}
     >
       {/* Background gradient with animation */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-800 transition-all duration-1000 ease-in-out group-hover:from-blue-500 group-hover:to-blue-700"></div>
@@ -281,7 +281,7 @@ const ProductShowcase: React.FC = () => {
               <SwiperSlide key={item.id} className="rounded-2xl overflow-hidden">
                 <div 
                   className="h-full w-full bg-white flex flex-col cursor-pointer"
-                  onClick={() => window.location.href = '/bao-gia'}
+                  onClick={() => window.location.href = `/bao-gia?product=${encodeURIComponent(item.title)}`}
                 >
                   {/* Badges */}
                   <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
