@@ -1,23 +1,48 @@
 import React from 'react';
 import { ArrowRight, Award, Clock, Zap } from 'lucide-react';
+import { motion } from "framer-motion";
 
 const Hero: React.FC = () => {
   return (
-    <section className="pt-24 pb-16 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 bg-[length:200%_200%] animate-gradient-pan">
+    <motion.section
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
+      viewport={{ once: true }}
+      className="pt-24 pb-16 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 bg-[length:200%_200%]"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Column - Content */}
-          <div className="space-y-8 animate-slide-in-left">
-            <div className="space-y-4 animate-stagger-children">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight animate-fade-in-up">
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
+            viewport={{ once: true }}
+            className="space-y-8"
+          >
+            <div className="space-y-4">
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
+                viewport={{ once: true }}
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight"
+              >
                 Bao Bì Cao Cấp
-                <span className="text-blue-700 block animate-slide-in-right animation-delay-300">Nâng Tầm Thương Hiệu</span>
-              </h1>
-              <p className="text-lg sm:text-xl text-gray-600 leading-relaxed animate-fade-in-up animation-delay-500">
+                <span className="text-blue-700 block">Nâng Tầm Thương Hiệu</span>
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5, ease: 'easeOut' }}
+                viewport={{ once: true }}
+                className="text-lg sm:text-xl text-gray-600 leading-relaxed"
+              >
                 Biến đổi cách trình bày sản phẩm của bạn với các giải pháp bao bì tùy chỉnh 
                 được thiết kế cho sự thành công của doanh nghiệp. Chúng tôi mang đến chất lượng 
                 đặc biệt, thiết kế sáng tạo và dịch vụ đáng tin cậy mà các thương hiệu hàng đầu tin tưởng.
-              </p>
+              </motion.p>
             </div>
 
             {/* Key Benefits */}
@@ -47,7 +72,7 @@ const Hero: React.FC = () => {
               </button>
             </div>
 
-          </div>
+          </motion.div>
 
           {/* Right Column - Image */}
           <div className="relative order-first lg:order-last animate-slide-in-right">
@@ -68,7 +93,7 @@ const Hero: React.FC = () => {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

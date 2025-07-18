@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 interface ServiceCardProps {
   id: string;
@@ -21,23 +22,36 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   isNew = false,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
   const navigate = useNavigate();
 
   return (
-    <div 
-      className={`group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-2 border-transparent`}
+    <motion.div
+      className={`group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-2 border-transparent h-full flex flex-col`}
+      initial="hidden"
+      whileInView={isImageLoaded ? "visible" : "hidden"}
+      viewport={{ once: false, amount: 0.2 }}
+      variants={{
+        hidden: { opacity: 0, y: 40 },
+        visible: { opacity: 1, y: 0 }
+      }}
+      transition={{ duration: 0.6 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       data-aos="fade-up"
     >
       {/* Banner with blur instead of product image */}
       <div className={`relative overflow-hidden h-40 rounded-t-xl bg-gray-100`}>
-        <img 
-          src={category === 'printing' ? image : '/imageHeader/service.png'} 
+        <img
+          src={category === 'printing' ? image : '/imageHeader/service.png'}
           alt={title}
           className={`w-full h-full object-cover ${category === 'printing' ? 'scale-105 mix-blend-multiply opacity-90' : 'blur-sm scale-105'}`}
+          onLoad={() => setIsImageLoaded(true)}
+          style={{ opacity: isImageLoaded ? 1 : 0, transition: 'opacity 0.3s' }}
         />
-        <div className="absolute inset-0 bg-black/30"></div>
+        {!isImageLoaded && (
+          <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+        )}
         {/* Category badge */}
         <div className="absolute top-4 left-4">
           <span className={`bg-gray-200 text-gray-700 text-xs font-medium px-2.5 py-1 rounded-full`}>
@@ -58,13 +72,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           <div className={`h-0.5 w-0 group-hover:w-16 bg-gray-300 transition-all duration-300`}></div>
         </div>
       </div>
-      
       {/* Content */}
-      <div className="p-6">
+      <div className="p-6 flex flex-col flex-1">
         <p className="text-gray-600 mb-6 line-clamp-3">
           {description}
         </p>
-        
         {/* Features */}
         <div className="mb-6">
           <h4 className="text-sm font-semibold text-gray-500 mb-3 flex items-center">
@@ -73,7 +85,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             </svg>
             Đặc điểm nổi bật
           </h4>
-          
           <ul className="space-y-2">
             {features.slice(0, 3).map((feature, index) => (
               <li key={index} className="flex items-start">
@@ -85,10 +96,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             ))}
           </ul>
         </div>
-        
         {/* Buttons */}
-        <div className="flex gap-3">
-          <button 
+        <div className="flex gap-3 mt-auto">
+          <button
             className={`flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-300 flex items-center justify-center`}
             onClick={() => navigate(`/bao-gia?product=${encodeURIComponent(title)}`)}
           >
@@ -97,8 +107,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
             </svg>
           </button>
-          
-          <Link 
+          <Link
             to={`/dich-vu/${id}`}
             className="py-2.5 px-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300"
           >
@@ -108,7 +117,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           </Link>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

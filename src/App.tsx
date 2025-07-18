@@ -16,10 +16,9 @@ import ContactPage from './pages/Contact';
 import BlogPage from './pages/Blog';
 import BlogPostPage from './pages/BlogPost';
 import AnimationDemo from './pages/AnimationDemo';
-import ThoaThuanSuDungPage from './pages/ThoaThuanSuDung';
-import ChinhSachBaoMatPage from './pages/ChinhSachBaoMat';
-import ChinhSachPage from './pages/ChinhSach';
-import BaoGiaPage from './pages/BaoGia';
+import TermsOfUsePage from './pages/TermsOfUse';
+import PrivacyPolicyPage from './pages/PrivacyPolicy';
+import QuotePage from './pages/Quote';
 import ServiceDetailPage from './pages/ServiceDetail';
 
 // Register service worker for offline support
@@ -54,10 +53,9 @@ function App() {
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/blog/:slug" element={<BlogPostPage />} />
               <Route path="/animation-demo" element={<AnimationDemo />} />
-              <Route path="/thoa-thuan-su-dung" element={<ThoaThuanSuDungPage />} />
-              <Route path="/chinh-sach-bao-mat" element={<ChinhSachBaoMatPage />} />
-              <Route path="/chinh-sach" element={<ChinhSachPage />} />
-              <Route path="/bao-gia" element={<BaoGiaPage />} />
+              <Route path="/thoa-thuan-su-dung" element={<TermsOfUsePage />} />
+              <Route path="/chinh-sach-bao-mat" element={<PrivacyPolicyPage />} />
+              <Route path="/bao-gia" element={<QuotePage />} />
               <Route path="/dich-vu/:id" element={<ServiceDetailPage />} />
               
               {/* Policy/Info pages */}

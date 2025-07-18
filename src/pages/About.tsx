@@ -3,6 +3,7 @@ import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import ServiceFeatures from '../components/ServiceFeatures';
 import ServiceProcess from '../components/ServiceProcess';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 // Team member interface
 interface TeamMember {
@@ -44,28 +45,28 @@ const teamData: TeamMember[] = [
 const timelineData = [
   {
     year: '2008',
-    title: 'Thành lập công ty',
-    description: 'Công ty được thành lập với xưởng in nhỏ tại Quận 1, TP.HCM.'
+    title: 'Company Establishment',
+    description: 'Company established with a small printing shop in District 1, Ho Chi Minh City.'
   },
   {
     year: '2012',
-    title: 'Mở rộng cơ sở sản xuất',
-    description: 'Mở rộng xưởng in với diện tích hơn 500m² tại Quận Bình Tân.'
+    title: 'Expanding Production Facilities',
+    description: 'Expanded printing shop with an area of more than 500m² in Binh Tan District.'
   },
   {
     year: '2015',
-    title: 'Đầu tư máy móc hiện đại',
-    description: 'Đầu tư hệ thống máy in offset 4 màu và thiết bị hoàn thiện sau in.'
+    title: 'Investing in Modern Equipment',
+    description: 'Invested in a 4-color Heidelberg offset printing system and finishing equipment.'
   },
   {
     year: '2018',
-    title: 'Thành lập chi nhánh Hà Nội',
-    description: 'Mở chi nhánh tại Hà Nội để phục vụ khách hàng khu vực miền Bắc.'
+    title: 'Establishing a Branch in Hanoi',
+    description: 'Established a branch in Hanoi to serve customers in the northern region.'
   },
   {
     year: '2022',
-    title: 'Nhà máy mới',
-    description: 'Khai trương nhà máy mới với diện tích 2000m² tại KCN Tân Phú.'
+    title: 'New Factory',
+    description: 'Officially opened a new factory with an area of 2000m² in Tan Phu Industrial Zone.'
   }
 ];
 
@@ -75,10 +76,14 @@ const AboutPage: React.FC = () => {
   
   return (
     <div className="bg-gray-50 min-h-screen">
-      {/* Banner section */}
-      {/* Removed redundant banner image here */}
       {/* Hero section */}
-      <section className="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white overflow-hidden">
+      <motion.section
+        initial={{ opacity: 0, y: -40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        viewport={{ once: true }}
+        className="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white overflow-hidden"
+      >
         {/* Banner background blur */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -100,74 +105,104 @@ const AboutPage: React.FC = () => {
           </svg>
         </div>
         <div className="container max-w-7xl mx-auto px-4 py-24 md:py-32 relative z-20 flex flex-col items-center justify-center text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight drop-shadow-lg">
-            Về Chúng Tôi
-          </h1>
-          <p className="text-lg md:text-xl text-blue-100 max-w-xl mx-auto drop-shadow">
-            Hơn 15 năm kinh nghiệm trong ngành in ấn, chúng tôi tự hào mang đến những sản phẩm chất lượng cao với giá thành hợp lý.
-          </p>
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: 'easeOut' }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-5xl font-bold mb-6 leading-tight drop-shadow-lg"
+          >
+            Hành trình sáng tạo cùng Kim Tiền
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
+            viewport={{ once: true }}
+            className="text-lg md:text-xl text-blue-100 max-w-xl mx-auto drop-shadow"
+          >
+            Chúng tôi không chỉ in ấn – chúng tôi đồng hành cùng bạn kiến tạo giá trị thương hiệu, lan tỏa cảm hứng và nâng tầm từng sản phẩm Việt.
+          </motion.p>
         </div>
-      </section>
+      </motion.section>
       
       {/* Company intro */}
-      <section className="py-20 px-4">
+      <motion.section
+        className="py-20 px-4"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.12 } }
+        }}
+      >
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div data-aos="fade-right">
-              <h2 className="text-3xl font-bold text-gray-800 mb-6">Công ty In Ấn Kim Tiền</h2>
-              <div className="w-20 h-1 bg-blue-600 mb-6"></div>
-              <p className="text-gray-600 mb-6 text-lg">
-                Công ty In Ấn Kim Tiền được thành lập từ năm 2008, là đơn vị chuyên cung cấp các dịch vụ in ấn chất lượng cao cho các doanh nghiệp trong và ngoài nước.
-              </p>
-              <p className="text-gray-600 mb-6">
-                Với đội ngũ nhân viên giàu kinh nghiệm cùng hệ thống máy móc hiện đại, chúng tôi cam kết mang đến cho khách hàng những sản phẩm in ấn chất lượng cao, đáp ứng mọi yêu cầu khắt khe nhất.
-              </p>
-              <p className="text-gray-600 mb-8">
-                Kim Tiền tự hào là đối tác tin cậy của nhiều doanh nghiệp lớn trong các lĩnh vực thực phẩm, mỹ phẩm, dược phẩm và nhiều ngành hàng khác.
-              </p>
-              <div className="grid grid-cols-2 gap-8">
-                <div>
-                  <div className="text-3xl font-bold text-blue-600 mb-2">15+</div>
-                  <p className="text-gray-600">Năm kinh nghiệm</p>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-blue-600 mb-2">500+</div>
-                  <p className="text-gray-600">Khách hàng tin tưởng</p>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-blue-600 mb-2">50+</div>
-                  <p className="text-gray-600">Nhân viên chuyên nghiệp</p>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-blue-600 mb-2">5000+</div>
-                  <p className="text-gray-600">Dự án đã hoàn thành</p>
-                </div>
-              </div>
-            </div>
-            <div className="relative" data-aos="fade-left">
-              <img 
-                src="https://images.unsplash.com/photo-1573164574572-cb89e39749b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80" 
-                alt="Xưởng in" 
+            <motion.div
+              variants={{ hidden: { opacity: 0, x: -40 }, visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: 'easeOut' } } }}
+            >
+              <motion.h2 className="text-3xl font-bold text-gray-800 mb-6">Công ty In ấn Kim Tiền</motion.h2>
+              <motion.div className="w-20 h-1 bg-blue-600 mb-6" />
+              <motion.p className="text-gray-600 mb-6 text-lg">Thành lập từ năm 2008, Kim Tiền chuyên cung cấp giải pháp in ấn sáng tạo, chất lượng cao cho doanh nghiệp trong và ngoài nước.</motion.p>
+              <motion.p className="text-gray-600 mb-6">Đội ngũ nhân sự giàu kinh nghiệm cùng hệ thống máy móc hiện đại là cam kết cho mỗi sản phẩm in hoàn hảo, đáp ứng mọi yêu cầu khắt khe nhất.</motion.p>
+              <motion.p className="text-gray-600 mb-8">Kim Tiền tự hào là đối tác tin cậy của nhiều thương hiệu lớn trong lĩnh vực thực phẩm, mỹ phẩm, dược phẩm và nhiều ngành nghề khác.</motion.p>
+              <motion.div className="grid grid-cols-2 gap-8">
+                {[{label:'Năm kinh nghiệm',value:'15+'},{label:'Khách hàng tin tưởng',value:'500+'},{label:'Nhân sự chuyên nghiệp',value:'50+'},{label:'Dự án đã thực hiện',value:'5000+'}].map((item,idx)=>(
+                  <motion.div key={item.label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2+idx*0.1, ease: 'easeOut' }} viewport={{ once: true }}>
+                    <div className="text-3xl font-bold text-blue-600 mb-2">{item.value}</div>
+                    <p className="text-gray-600">{item.label}</p>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
+            <motion.div
+              variants={{ hidden: { opacity: 0, x: 40 }, visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: 'easeOut' } } }}
+              className="relative"
+            >
+              <motion.img
+                src="https://images.unsplash.com/photo-1573164574572-cb89e39749b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80"
+                alt="Printing Shop"
                 className="rounded-lg shadow-xl w-full h-full object-cover"
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.7, delay: 0.3, ease: 'easeOut' }}
+                viewport={{ once: true }}
+                whileHover={{ scale: 1.04 }}
               />
-              <div className="absolute -bottom-6 -left-6 bg-blue-600 rounded-lg p-6 shadow-lg">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' }}
+                viewport={{ once: true }}
+                className="absolute -bottom-6 -left-6 bg-blue-600 rounded-lg p-6 shadow-lg"
+              >
                 <p className="text-white text-lg font-medium">
-                  "Chất lượng là ưu tiên hàng đầu trong mọi sản phẩm của chúng tôi"
+                  "Chất lượng là giá trị cốt lõi trong từng sản phẩm Kim Tiền tạo ra"
                 </p>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
       
       {/* Company history timeline */}
-      <section className="py-20 px-4 bg-gray-50">
+      <motion.section
+        className="py-20 px-4 bg-gray-50"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.12 } }
+        }}
+      >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16" data-aos="fade-up">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Lịch Sử Phát Triển</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">Hành trình phát triển</h2>
             <div className="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
             <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-              Hành trình phát triển của Kim Tiền qua các cột mốc quan trọng
+              Những dấu mốc tự hào trên hành trình lớn mạnh của Kim Tiền
             </p>
           </div>
           
@@ -178,59 +213,83 @@ const AboutPage: React.FC = () => {
             {/* Timeline items */}
             <div className="relative z-10">
               {timelineData.map((item, index) => (
-                <div 
+                <motion.div 
                   key={index}
                   className={`flex flex-col md:flex-row items-center mb-16 ${
                     index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
                   }`}
-                  data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'}
+                  variants={{
+                    hidden: { opacity: 0, y: 50 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } }
+                  }}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
                 >
-                  <div className="w-full md:w-1/2 mb-6 md:mb-0">
-                    <div className={`bg-white p-6 rounded-lg shadow-lg ${
+                  <motion.div className="w-full md:w-1/2 mb-6 md:mb-0">
+                    <motion.div className={`bg-white p-6 rounded-lg shadow-lg ${
                       index % 2 === 0 ? 'md:mr-8' : 'md:ml-8'
                     }`}>
                       <div className="text-blue-600 font-bold mb-2">{item.year}</div>
-                      <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
-                      <p className="text-gray-600">{item.description}</p>
-                    </div>
-                  </div>
+                      <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title === 'Company Establishment' ? 'Thành lập công ty' : item.title === 'Expanding Production Facilities' ? 'Mở rộng sản xuất' : item.title === 'Investing in Modern Equipment' ? 'Đầu tư thiết bị hiện đại' : item.title === 'Establishing a Branch in Hanoi' ? 'Mở chi nhánh Hà Nội' : item.title === 'New Factory' ? 'Nhà máy mới' : item.title}</h3>
+                      <p className="text-gray-600">{item.description === 'Company established with a small printing shop in District 1, Ho Chi Minh City.' ? 'Khởi đầu từ một xưởng in nhỏ tại Quận 1, TP.HCM.' : item.description === 'Expanded printing shop with an area of more than 500m² in Binh Tan District.' ? 'Mở rộng xưởng in với diện tích trên 500m² tại Bình Tân.' : item.description === 'Invested in a 4-color Heidelberg offset printing system and finishing equipment.' ? 'Đầu tư hệ thống in offset 4 màu Heidelberg và thiết bị thành phẩm hiện đại.' : item.description === 'Established a branch in Hanoi to serve customers in the northern region.' ? 'Thành lập chi nhánh Hà Nội, phục vụ khách hàng miền Bắc.' : item.description === 'Officially opened a new factory with an area of 2000m² in Tan Phu Industrial Zone.' ? 'Khai trương nhà máy mới 2000m² tại KCN Tân Phú.' : item.description}</p>
+                    </motion.div>
+                  </motion.div>
                   
-                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-blue-600 border-4 border-white flex items-center justify-center shadow-lg">
+                  <motion.div className="flex-shrink-0 w-12 h-12 rounded-full bg-blue-600 border-4 border-white flex items-center justify-center shadow-lg">
                     <span className="text-white font-bold">{item.year.substring(2)}</span>
-                  </div>
+                  </motion.div>
                   
-                  <div className="w-full md:w-1/2"></div>
-                </div>
+                  <motion.div className="w-full md:w-1/2"></motion.div>
+                </motion.div>
               ))}
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
       
       {/* Team section */}
-      <section className="py-20 px-4">
+      <motion.section
+        className="py-20 px-4"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.12 } }
+        }}
+      >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16" data-aos="fade-up">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Đội Ngũ Lãnh Đạo</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">Ban lãnh đạo</h2>
             <div className="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
             <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-              Với đội ngũ lãnh đạo giàu kinh nghiệm, chúng tôi luôn nỗ lực đem đến những sản phẩm và dịch vụ tốt nhất cho khách hàng.
+              Đội ngũ lãnh đạo giàu kinh nghiệm, tận tâm và sáng tạo là nền tảng cho mọi thành công của Kim Tiền.
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {teamData.map((member, index) => (
-              <div 
+              <motion.div 
                 key={member.id}
                 className="bg-white rounded-lg overflow-hidden shadow-lg transition-all hover:shadow-xl"
-                data-aos="fade-up"
-                data-aos-delay={index * 100}
+                variants={{
+                  hidden: { opacity: 0, y: 50 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } }
+                }}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
               >
                 <div className="aspect-[3/4] overflow-hidden">
-                  <img 
+                  <motion.img 
                     src={member.image} 
                     alt={member.name} 
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.6, delay: 0.1 + index * 0.1, ease: 'easeOut' }}
+                    viewport={{ once: true }}
                   />
                 </div>
                 <div className="p-6 text-center">
@@ -254,99 +313,174 @@ const AboutPage: React.FC = () => {
                     </a>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
       
       {/* Facilities */}
-      <section className="py-20 px-4 bg-gray-900 text-white">
+      <motion.section
+        className="py-20 px-4 bg-gray-900 text-white"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.12 } }
+        }}
+      >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16" data-aos="fade-up">
-            <h2 className="text-3xl font-bold mb-4">Cơ Sở Vật Chất</h2>
+            <h2 className="text-3xl font-bold mb-4">Cơ sở vật chất</h2>
             <div className="w-24 h-1 bg-blue-500 mx-auto mb-6"></div>
             <p className="text-gray-300 max-w-2xl mx-auto text-lg">
-              Kim Tiền sở hữu hệ thống nhà xưởng rộng lớn với máy móc thiết bị hiện đại, đảm bảo chất lượng sản phẩm tốt nhất.
+              Kim Tiền sở hữu hệ thống nhà xưởng quy mô lớn, máy móc hiện đại, đảm bảo chất lượng sản phẩm vượt trội.
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg" data-aos="fade-up">
-              <img 
+            <motion.div
+              className="bg-gray-800 rounded-lg overflow-hidden shadow-lg"
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } }
+              }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <motion.img 
                 src="https://images.unsplash.com/photo-1574521091464-3c45aba9cda4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80" 
-                alt="Máy in offset" 
+                alt="Offset Printing Machine" 
                 className="w-full h-64 object-cover"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+                viewport={{ once: true }}
               />
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Hệ thống máy in offset</h3>
+                <h3 className="text-xl font-bold mb-2">Hệ thống in offset</h3>
                 <p className="text-gray-400">
-                  Hệ thống máy in offset 4 màu Heidelberg, đảm bảo chất lượng in ấn sắc nét và ổn định.
+                  Máy in offset 4 màu Heidelberg, cho chất lượng in sắc nét, ổn định.
                 </p>
               </div>
-            </div>
+            </motion.div>
             
-            <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="100">
-              <img 
+            <motion.div
+              className="bg-gray-800 rounded-lg overflow-hidden shadow-lg"
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut', delay: 0.1 } }
+              }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <motion.img 
                 src="https://images.unsplash.com/photo-1601691294414-a7e06f8f8bdd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80" 
-                alt="Máy cắt giấy" 
+                alt="Paper Cutting Machine" 
                 className="w-full h-64 object-cover"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+                viewport={{ once: true }}
               />
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Hệ thống cắt và bế</h3>
+                <h3 className="text-xl font-bold mb-2">Cắt xén & đóng cuốn tự động</h3>
                 <p className="text-gray-400">
-                  Máy cắt giấy và máy bế tự động, giúp tạo ra các sản phẩm với độ chính xác cao.
+                  Máy cắt giấy, đóng cuốn tự động, đảm bảo độ chính xác tuyệt đối cho từng sản phẩm.
                 </p>
               </div>
-            </div>
+            </motion.div>
             
-            <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="200">
-              <img 
+            <motion.div
+              className="bg-gray-800 rounded-lg overflow-hidden shadow-lg"
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut', delay: 0.2 } }
+              }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <motion.img 
                 src="https://images.unsplash.com/photo-1553413077-190dd305871c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80" 
-                alt="Phòng thiết kế" 
+                alt="Design Room" 
                 className="w-full h-64 object-cover"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' }}
+                viewport={{ once: true }}
               />
               <div className="p-6">
                 <h3 className="text-xl font-bold mb-2">Phòng thiết kế chuyên nghiệp</h3>
                 <p className="text-gray-400">
-                  Phòng thiết kế với đội ngũ nhân viên sáng tạo, thiết bị hiện đại đáp ứng mọi yêu cầu của khách hàng.
+                  Không gian sáng tạo với đội ngũ thiết kế trẻ trung, thiết bị hiện đại, đáp ứng mọi ý tưởng của khách hàng.
                 </p>
               </div>
-            </div>
+            </motion.div>
           </div>
           
           <div className="mt-16 text-center" data-aos="fade-up">
-            <a href="/lien-he" className="inline-block px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
-              Tham quan nhà máy
+            <a href="/contact" className="inline-block px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+              Visit Factory
             </a>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Tại sao lại chọn chúng tôi */}
+      {/* Why choose us */}
       <ServiceFeatures />
-      {/* Quy trình làm việc */}
+      {/* Work Process */}
       <ServiceProcess />
       
       {/* CTA section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-blue-800">
+      <motion.section
+        className="py-20 px-4 bg-gradient-to-r from-blue-600 to-blue-800"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.12 } }
+        }}
+      >
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-4" data-aos="fade-up">
-            Sẵn sàng hợp tác cùng chúng tôi?
-          </h2>
-          <p className="text-blue-100 mb-8 max-w-2xl mx-auto text-lg" data-aos="fade-up" data-aos-delay="100">
-            Liên hệ ngay để được tư vấn và báo giá cho dự án của bạn
-          </p>
+          <motion.h2
+            className="text-3xl font-bold text-white mb-4"
+            variants={{
+              hidden: { opacity: 0, y: 50 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } }
+            }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            Sẵn sàng đồng hành cùng bạn?
+          </motion.h2>
+          <motion.p
+            className="text-blue-100 mb-8 max-w-2xl mx-auto text-lg"
+            variants={{
+              hidden: { opacity: 0, y: 50 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut', delay: 0.1 } }
+            }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            Liên hệ Kim Tiền để được tư vấn & báo giá giải pháp in ấn tối ưu cho dự án của bạn
+          </motion.p>
           <div className="flex flex-wrap gap-4 justify-center" data-aos="fade-up" data-aos-delay="200">
-            <Link to="/bao-gia" className="px-6 py-3 bg-white text-blue-700 font-medium rounded-lg hover:bg-gray-100 transition-colors">
+            <Link to="/quote-request" className="px-6 py-3 bg-white text-blue-700 font-medium rounded-lg hover:bg-gray-100 transition-colors">
               Yêu cầu báo giá
             </Link>
-            <a href="/lien-he" className="px-6 py-3 bg-blue-900 text-white border border-blue-400 font-medium rounded-lg hover:bg-blue-950 transition-colors">
+            <a href="/contact" className="px-6 py-3 bg-blue-900 text-white border border-blue-400 font-medium rounded-lg hover:bg-blue-950 transition-colors">
               Liên hệ ngay
             </a>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 };

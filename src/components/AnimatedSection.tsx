@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect, useRef } from 'react';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { motion } from "framer-motion";
 
 interface AnimatedSectionProps {
   children: ReactNode;
@@ -18,7 +19,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   duration = 800,
   className = '',
   threshold = 0.1,
-  once = true,
+  once = false,
 }) => {
   const { elementRef, isVisible } = useScrollAnimation({
     threshold,
@@ -26,31 +27,28 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
     delay,
   });
 
-  // Các class cho từng loại animation
-  const animationClasses = {
-    'fade-up': 'translate-y-10 opacity-0',
-    'fade-down': '-translate-y-10 opacity-0',
-    'fade-left': 'translate-x-10 opacity-0',
-    'fade-right': '-translate-x-10 opacity-0',
-    'zoom-in': 'scale-95 opacity-0',
-    'flip-up': 'rotateX-90 opacity-0',
-  };
-
-  // Style cho duration
-  const style = {
-    transitionDuration: `${duration}ms`,
+  // Mapping animation prop to framer-motion variants
+  const variants = {
+    'fade-up': { hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0 } },
+    'fade-down': { hidden: { opacity: 0, y: -40 }, visible: { opacity: 1, y: 0 } },
+    'fade-left': { hidden: { opacity: 0, x: 40 }, visible: { opacity: 1, x: 0 } },
+    'fade-right': { hidden: { opacity: 0, x: -40 }, visible: { opacity: 1, x: 0 } },
+    'zoom-in': { hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } },
+    'flip-up': { hidden: { opacity: 0, rotateX: 90 }, visible: { opacity: 1, rotateX: 0 } },
   };
 
   return (
-    <div
+    <motion.div
       ref={elementRef as React.RefObject<HTMLDivElement>}
-      className={`transition-all ease-out ${className} ${
-        isVisible ? '' : animationClasses[animation]
-      }`}
-      style={style}
+      className={className}
+      initial="hidden"
+      animate={isVisible ? "visible" : "hidden"}
+      variants={variants[animation]}
+      transition={{ duration: duration / 1000, delay: delay / 1000, ease: 'easeOut' }}
+      style={{ willChange: 'opacity, transform' }}
     >
       {children}
-    </div>
+    </motion.div>
   );
 };
 

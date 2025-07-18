@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { portfolioItemsData } from '../utils/portfolioData';
+import { motion } from "framer-motion";
 
 const Portfolio: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -21,6 +22,19 @@ const Portfolio: React.FC = () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [total]);
+
+  // Preload all project images on mount
+  useEffect(() => {
+    featuredProducts.forEach(item => {
+      if (item.image) {
+        const img = new window.Image();
+        img.src = item.image;
+      }
+    });
+  }, [featuredProducts]);
+
+  // Memoize all projects
+  const allProjects = useMemo(() => featuredProducts, [featuredProducts]);
 
   // Hiệu ứng hiện khi vào viewport
   useEffect(() => {
@@ -88,28 +102,50 @@ const Portfolio: React.FC = () => {
   };
 
   return (
-    <section 
+    <motion.section
       ref={sectionRef}
-      id="products" 
+      id="products"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
+      viewport={{ once: true }}
       className="py-20 bg-gradient-to-br from-gray-50 via-white to-blue-50/30 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-           <div className={`transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}> 
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                Dự Án <span className="text-blue-600">Tiêu Biểu</span>
-              </h2>
-            </div>
-            <div className={`transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: '200ms' }}>
-              <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                Khám phá các giải pháp bao bì sáng tạo và chất lượng cao mà chúng tôi đã thực hiện cho khách hàng
-              </p>
-            </div>
-            <div className={`mx-auto mt-8 h-1 w-24 bg-gradient-to-r from-blue-600 to-red-500 rounded-full transition-all duration-1000 ease-out ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}`} style={{ transitionDelay: '400ms' }} />
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1, ease: 'easeOut' }}
+            viewport={{ once: true }}
+            className=""
+          >
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Dự Án <span className="text-blue-600">Tiêu Biểu</span>
+            </h2>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
+            viewport={{ once: true }}
+            className=""
+          >
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Khám phá các giải pháp bao bì sáng tạo và chất lượng cao mà chúng tôi đã thực hiện cho khách hàng
+            </p>
+          </motion.div>
+          <motion.div
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            transition={{ duration: 1, delay: 0.4, ease: 'easeOut' }}
+            viewport={{ once: true }}
+            className="mx-auto mt-8 h-1 w-24 bg-gradient-to-r from-blue-600 to-red-500 rounded-full"
+          />
         </div>
         <div className="w-full flex justify-center">
           <div className="relative flex items-center gap-0 md:gap-6 lg:gap-10 h-[320px] md:h-[360px] lg:h-[400px] select-none" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            {featuredProducts.map((item, idx) => {
+            {allProjects.map((item, idx) => {
               // Tính toán index vòng lặp
               let realIdx = idx;
               if (centerIdx < 2 && idx > total - 3) realIdx = idx - total;
@@ -118,7 +154,7 @@ const Portfolio: React.FC = () => {
               return (
                 <div
                   key={item.id}
-                  className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-700 ease-in-out group cursor-pointer`}
+                  className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-700 ease-in-out group cursor-pointer ${realIdx === centerIdx || Math.abs(realIdx - centerIdx) <= 2 ? 'block' : 'hidden'}`}
                   style={style}
                   onClick={() => setCenterIdx(idx)}
                 >
@@ -140,8 +176,8 @@ const Portfolio: React.FC = () => {
                   )}
                   <span className="mt-6 block text-lg sm:text-xl font-bold text-gray-900 drop-shadow-lg group-hover:text-blue-700 transition-colors duration-300 text-center">
                     {item.title || item.category}
-              </span>
-            </div>
+                  </span>
+                </div>
               );
             })}
           </div>
@@ -150,7 +186,7 @@ const Portfolio: React.FC = () => {
           .coverflow-perspective { perspective: 1200px; }
         `}</style>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

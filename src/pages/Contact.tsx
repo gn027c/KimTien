@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { motion } from 'framer-motion';
 import { sendEmail } from '../utils/emailService';
 import { validateEmail } from '../utils/emailConfig';
 import { Mail, Phone, MessageCircle, User, Users, Zap, Facebook } from 'lucide-react';
+import { useLoadingOverlay } from '../context/LoadingOverlayContext';
 
 // New: Example avatars (replace with real images if available)
 const AVATAR_PLACEHOLDER =
@@ -58,6 +60,13 @@ const STAFF = [
 
 const ContactPage: React.FC = () => {
   useScrollAnimation();
+  const { show } = useLoadingOverlay();
+  React.useEffect(() => {
+    // Lấy danh sách avatar local nếu có
+    const images = STAFF.map(m => m.avatar).filter(src => src.startsWith('/image'));
+    if (images.length > 0) show(images);
+    // eslint-disable-next-line
+  }, []);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -78,7 +87,7 @@ const ContactPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateEmail(formData.email)) {
-      setError('Vui lòng nhập email hợp lệ');
+      setError('Vui lòng nhập địa chỉ email hợp lệ');
       return;
     }
     setIsSubmitting(true);
@@ -91,7 +100,7 @@ const ContactPage: React.FC = () => {
         setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
       }, 5000);
     } catch (err) {
-      setError('Có lỗi xảy ra khi gửi email. Vui lòng thử lại sau.');
+      setError('Đã xảy ra lỗi khi gửi email. Vui lòng thử lại sau.');
     } finally {
       setIsSubmitting(false);
     }
@@ -122,85 +131,122 @@ const ContactPage: React.FC = () => {
         </div>
         <div className="container max-w-3xl mx-auto px-4 py-24 md:py-32 relative z-20 flex flex-col items-center justify-center text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight drop-shadow-lg">
-            Liên Hệ Đội Ngũ Kim Tiền
+            Liên hệ với đội ngũ của chúng tôi
           </h1>
           <p className="text-lg md:text-xl text-blue-100 max-w-xl mx-auto drop-shadow">
-            Đội ngũ chuyên nghiệp, tận tâm luôn sẵn sàng hỗ trợ bạn mọi lúc.
+            Đội ngũ chuyên nghiệp của chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7.
           </p>
         </div>
       </section>
 
       {/* Staff grid */}
       <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {STAFF.map((member, idx) => (
-            <div key={member.email} className="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center text-center border border-blue-100 hover:shadow-2xl transition-all duration-300">
-              <img src={member.avatar} alt={member.name} className="w-20 h-20 rounded-full border-4 border-white shadow mb-4 object-cover bg-white" />
-              <div className="font-bold text-lg text-blue-700 mb-1">{member.name}</div>
-              <div className="text-sm text-gray-500 font-medium mb-2">{member.role}</div>
-              <div className="text-gray-600 text-sm mb-4">{member.description}</div>
-              <div className="flex gap-3 mt-auto">
-                <a href={`tel:${member.phone}`} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full font-semibold text-sm bg-blue-600 text-white hover:bg-blue-700 shadow transition-colors"><Phone className="w-4 h-4" />Gọi</a>
-                <a href={`https://zalo.me/${member.zalo}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full font-semibold text-sm bg-gray-100 text-blue-700 hover:bg-blue-100 shadow transition-colors"><Zap className="w-4 h-4" />Zalo</a>
-                <a href={`mailto:${member.email}`} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full font-semibold text-sm bg-gray-100 text-blue-700 hover:bg-blue-100 shadow transition-colors"><Mail className="w-4 h-4" />Email</a>
-              </div>
-            </div>
-          ))}
-        </div>
+        <motion.div
+          className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.12
+              }
+            }
+          }}
+        >
+          {STAFF.map((member, idx) => {
+            const [isImageLoaded, setIsImageLoaded] = React.useState(false);
+            return (
+              <motion.div
+                key={member.email}
+                initial="hidden"
+                whileInView={isImageLoaded ? "visible" : "hidden"}
+                viewport={{ once: false, amount: 0.2 }}
+                variants={{
+                  hidden: { opacity: 0, y: 40 },
+                  visible: { opacity: 1, y: 0 }
+                }}
+                transition={{ duration: 0.6, delay: idx * 0.08 }}
+                className="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center text-center border border-blue-100 hover:shadow-2xl transition-all duration-300"
+              >
+                <div className="relative mb-4">
+                  <img
+                    src={member.avatar}
+                    alt={member.name}
+                    className="w-20 h-20 rounded-full border-4 border-white shadow object-cover bg-white"
+                    onLoad={() => setIsImageLoaded(true)}
+                    style={{ opacity: isImageLoaded ? 1 : 0, transition: 'opacity 0.3s' }}
+                  />
+                  {!isImageLoaded && (
+                    <div className="absolute inset-0 w-20 h-20 flex items-center justify-center bg-gray-200 animate-pulse rounded-full" />
+                  )}
+                </div>
+                <div className="font-bold text-lg text-blue-700 mb-1">{member.name}</div>
+                <div className="text-sm text-gray-500 font-medium mb-2">{member.role}</div>
+                <div className="text-gray-600 text-sm mb-4">{member.description}</div>
+                <div className="flex gap-3 mt-auto">
+                  <a href={`tel:${member.phone}`} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full font-semibold text-sm bg-blue-600 text-white hover:bg-blue-700 shadow transition-colors"><Phone className="w-4 h-4" /> Gọi</a>
+                  <a href={`https://zalo.me/${member.zalo}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full font-semibold text-sm bg-gray-100 text-blue-700 hover:bg-blue-100 shadow transition-colors"><Zap className="w-4 h-4" /> Zalo</a>
+                  <a href={`mailto:${member.email}`} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full font-semibold text-sm bg-gray-100 text-blue-700 hover:bg-blue-100 shadow transition-colors"><Mail className="w-4 h-4" /> Email</a>
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
       </section>
 
       {/* Contact form section */}
       <section className="py-16 px-4 bg-white border-t border-blue-100">
         <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-10 border border-blue-100">
-            <h2 className="text-2xl font-bold text-blue-700 mb-6 flex items-center gap-2"><Mail className="w-6 h-6" /> Gửi tin nhắn cho Kim Tiền</h2>
-            <div className="mb-4 text-gray-500 text-sm">Chúng tôi cam kết bảo mật thông tin khách hàng. Vui lòng để lại thông tin, đội ngũ sẽ liên hệ tư vấn nhanh nhất!</div>
-            {formSubmitted ? (
-              <div className="text-center py-8">
+            <h2 className="text-2xl font-bold text-blue-700 mb-6 flex items-center gap-2"><Mail className="w-6 h-6" /> Gửi tin nhắn đến Kim Tiền</h2>
+            <div className="mb-4 text-gray-500 text-sm">Chúng tôi cam kết bảo mật thông tin khách hàng. Vui lòng để lại thông tin của bạn, đội ngũ của chúng tôi sẽ liên hệ với bạn sớm nhất có thể!</div>
+          {formSubmitted ? (
+            <div className="text-center py-8">
                 <div className="w-12 h-12 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                </div>
-                <h3 className="text-lg font-bold text-blue-700 mb-1">Tin nhắn đã được gửi!</h3>
-                <p className="text-gray-600 text-sm">Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ phản hồi trong thời gian sớm nhất.</p>
               </div>
-            ) : (
-              <form onSubmit={handleSubmit}>
-                {error && (
+                <h3 className="text-lg font-bold text-blue-700 mb-1">Tin nhắn đã gửi!</h3>
+                <p className="text-gray-600 text-sm">Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ phản hồi sớm nhất có thể.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              {error && (
                   <div className="mb-3 p-2 bg-red-50 text-red-600 rounded border border-red-200 text-sm">{error}</div>
-                )}
+              )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
+                <div>
                     <label className="block text-gray-700 text-xs font-medium mb-1">Họ và tên <span className="text-red-500">*</span></label>
                     <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-100 focus:border-blue-400 outline-none text-sm" required />
-                  </div>
-                  <div>
+                </div>
+                <div>
                     <label className="block text-gray-700 text-xs font-medium mb-1">Email <span className="text-red-500">*</span></label>
                     <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-100 focus:border-blue-400 outline-none text-sm" required />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
+                <div>
                     <label className="block text-gray-700 text-xs font-medium mb-1">Số điện thoại</label>
                     <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-100 focus:border-blue-400 outline-none text-sm" />
-                  </div>
-                  <div>
+                </div>
+                <div>
                     <label className="block text-gray-700 text-xs font-medium mb-1">Chủ đề <span className="text-red-500">*</span></label>
                     <select name="subject" value={formData.subject} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-100 focus:border-blue-400 outline-none text-sm" required>
-                      <option value="">-- Chọn chủ đề --</option>
-                      <option value="Báo giá">Báo giá</option>
-                      <option value="Tư vấn">Tư vấn</option>
-                      <option value="Hợp tác">Hợp tác</option>
-                      <option value="Khác">Khác</option>
-                    </select>
-                  </div>
+                    <option value="">-- Chọn chủ đề --</option>
+                    <option value="Quotation">Báo giá</option>
+                    <option value="Consultation">Tư vấn</option>
+                    <option value="Cooperation">Hợp tác</option>
+                    <option value="Other">Khác</option>
+                  </select>
                 </div>
+              </div>
                 <div className="mb-4">
-                  <label className="block text-gray-700 text-xs font-medium mb-1">Nội dung <span className="text-red-500">*</span></label>
+                  <label className="block text-gray-700 text-xs font-medium mb-1">Tin nhắn <span className="text-red-500">*</span></label>
                   <textarea name="message" value={formData.message} onChange={handleInputChange} rows={4} className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-100 focus:border-blue-400 outline-none text-sm" required></textarea>
-                </div>
+              </div>
                 <button type="submit" disabled={isSubmitting} className={`w-full px-5 py-2 font-medium rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm ${isSubmitting ? 'opacity-60 cursor-not-allowed' : ''}`}>{isSubmitting ? 'Đang gửi...' : 'Gửi tin nhắn'}</button>
-              </form>
-            )}
+            </form>
+          )}
           </div>
         </div>
       </section>

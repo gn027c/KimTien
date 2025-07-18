@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { portfolioItemsData } from '../utils/portfolioData';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import ProjectHero from '../components/ProjectHero';
+import { motion } from 'framer-motion';
+import { useLoadingOverlay } from '../context/LoadingOverlayContext';
 
 const ProjectsPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -11,6 +13,13 @@ const ProjectsPage: React.FC = () => {
   
   // Initialize scroll animations
   useScrollAnimation();
+  const { show } = useLoadingOverlay();
+  React.useEffect(() => {
+    // Lấy danh sách ảnh local của dự án hiện tại
+    const images = filteredProjects.map(p => p.image).filter(src => src.startsWith('/imageProject/'));
+    show(images);
+    // eslint-disable-next-line
+  }, []);
   
   // Filter projects based on selected category
   useEffect(() => {
@@ -65,6 +74,14 @@ const ProjectsPage: React.FC = () => {
     }, 0);
   };
 
+  // Smooth scroll khi đổi danh mục
+  useEffect(() => {
+    const el = document.getElementById('project-list');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [selectedCategory]);
+  
   // Stats for the hero section
   const heroStats = [
     { label: 'Dự án', value: `${portfolioItemsData.length}+` },
@@ -73,12 +90,50 @@ const ProjectsPage: React.FC = () => {
     { label: 'Hài lòng', value: '80%' },
   ];
   
+  // Thêm component con cho từng project card
+  function ProjectCard({ project, idx }: { project: any, idx: number }) {
+    const [isImageLoaded, setIsImageLoaded] = React.useState(false);
+    return (
+      <motion.div
+        key={project.id}
+        className="bg-white rounded-2xl flex flex-col items-stretch p-4 w-full max-w-full mx-auto group"
+        initial="hidden"
+        whileInView={isImageLoaded ? "visible" : "hidden"}
+        viewport={{ once: false, amount: 0.2 }}
+        variants={{
+          hidden: { opacity: 0, y: 40 },
+          visible: { opacity: 1, y: 0 }
+        }}
+        transition={{ duration: 0.6, delay: idx * 0.08 }}
+      >
+        <div className="w-full aspect-square flex items-center justify-center bg-white rounded-2xl mb-4 overflow-hidden border-2 border-transparent transition-all duration-200 group-hover:border-blue-500 relative">
+          <img
+            src={project.image}
+            alt={project.title}
+            className="object-contain max-h-[80%] max-w-[80%] mx-auto"
+            onLoad={() => setIsImageLoaded(true)}
+            style={{ opacity: isImageLoaded ? 1 : 0, transition: 'opacity 0.3s' }}
+          />
+          {!isImageLoaded && (
+            <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+          )}
+        </div>
+        <div className="w-full flex flex-col items-start bg-gray-50 rounded-xl px-4 py-3">
+          {project.category && (
+            <div className="text-xs text-gray-400 font-medium mb-1">{project.category}</div>
+          )}
+          <h3 className="font-bold text-gray-900 text-base mb-1 line-clamp-2">{project.title}</h3>
+        </div>
+      </motion.div>
+    );
+  }
+  
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Header with ProjectHero */}
       <ProjectHero
-        title="Dự Án Đã Thực Hiện"
-        subtitle="Khám phá bộ sưu tập những dự án in ấn chất lượng cao mà chúng tôi đã thực hiện cho các khách hàng doanh nghiệp."
+        title="Dự án hoàn thành"
+        subtitle="Khám phá bộ sưu tập các dự án in ấn chất lượng cao mà chúng tôi đã hoàn thành cho các khách hàng doanh nghiệp."
         stats={heroStats}
         cta={[]}
       />
@@ -95,7 +150,7 @@ const ProjectsPage: React.FC = () => {
                     ? 'bg-blue-600 text-white border-blue-600 shadow'
                     : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-blue-50 hover:text-blue-700'
             }`}
-            onClick={() => setSelectedCategory(category)}
+            onClick={() => { setSelectedCategory(category); }}
           >
             {category}
             {portfolioItemsData.filter(p => p.category === category).length > 0 && (
@@ -114,9 +169,9 @@ const ProjectsPage: React.FC = () => {
           <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 16a4 4 0 100-8 4 4 0 000 8z"></path>
           </svg>
-          <h3 className="text-xl font-bold text-gray-800 mb-2">Không tìm thấy dự án</h3>
+          <h3 className="text-xl font-bold text-gray-800 mb-2">Không tìm thấy dự án nào</h3>
           <p className="text-gray-600 mb-6">
-            Hiện không có dự án nào trong danh mục này
+            Không có dự án nào trong danh mục này
           </p>
           <button 
               className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
@@ -126,30 +181,23 @@ const ProjectsPage: React.FC = () => {
           </button>
         </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {currentProjects.map(project => (
-              <div
-                key={project.id}
-                className="bg-white rounded-2xl flex flex-col items-stretch p-4 w-full max-w-full mx-auto group"
-              >
-                {/* Image section */}
-                <div className="w-full aspect-square flex items-center justify-center bg-white rounded-2xl mb-4 overflow-hidden border-2 border-transparent transition-all duration-200 group-hover:border-blue-500">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="object-contain max-h-[80%] max-w-[80%] mx-auto"
-                  />
-                </div>
-                {/* Info section */}
-                <div className="w-full flex flex-col items-start bg-gray-50 rounded-xl px-4 py-3">
-                  {project.category && (
-                    <div className="text-xs text-gray-400 font-medium mb-1">{project.category}</div>
-                  )}
-                  <h3 className="font-bold text-gray-900 text-base mb-1 line-clamp-2">{project.title}</h3>
-                </div>
-              </div>
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {},
+              visible: {
+                transition: {
+                  staggerChildren: 0.12
+                }
+              }
+            }}
+          >
+            {currentProjects.map((project, idx) => (
+              <ProjectCard key={project.id} project={project} idx={idx} />
             ))}
-        </div>
+        </motion.div>
       )}
       
         {/* Pagination */}

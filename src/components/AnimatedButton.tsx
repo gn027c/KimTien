@@ -1,11 +1,11 @@
-import React, { ButtonHTMLAttributes } from 'react';
+import React from 'react';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { motion, HTMLMotionProps } from "framer-motion";
 
-interface AnimatedButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface AnimatedButtonProps extends HTMLMotionProps<'button'> {
   animation?: 'bounce' | 'pulse' | 'scale' | 'slide' | 'fade';
   delay?: number;
   duration?: number;
-  className?: string;
   threshold?: number;
   once?: boolean;
 }
@@ -26,57 +26,38 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
     delay,
   });
 
-  // Các class cho từng loại animation
-  const getAnimationClasses = () => {
-    if (!isVisible) {
-      switch (animation) {
-        case 'bounce':
-          return 'opacity-0 translate-y-4';
-        case 'pulse':
-          return 'opacity-0 scale-95';
-        case 'scale':
-          return 'opacity-0 scale-90';
-        case 'slide':
-          return 'opacity-0 -translate-x-4';
-        case 'fade':
-          return 'opacity-0';
-        default:
-          return 'opacity-0';
-      }
-    }
-    return '';
+  // Mapping animation prop to framer-motion variants
+  const variants = {
+    bounce: { hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } },
+    pulse: { hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } },
+    scale: { hidden: { opacity: 0, scale: 0.9 }, visible: { opacity: 1, scale: 1 } },
+    slide: { hidden: { opacity: 0, x: -16 }, visible: { opacity: 1, x: 0 } },
+    fade: { hidden: { opacity: 0 }, visible: { opacity: 1 } },
   };
 
-  // Thêm hiệu ứng hover cho nút
-  const getHoverClasses = () => {
-    if (isVisible) {
-      switch (animation) {
-        case 'bounce':
-          return 'hover:-translate-y-1 active:translate-y-0';
-        case 'pulse':
-          return 'hover:scale-105 active:scale-100';
-        case 'scale':
-          return 'hover:scale-105 active:scale-95';
-        case 'slide':
-          return 'hover:-translate-x-1 active:translate-x-0';
-        case 'fade':
-          return 'hover:opacity-90 active:opacity-100';
-        default:
-          return 'hover:opacity-90';
-      }
-    }
-    return '';
+  // Hover effect for each animation
+  const whileHover = {
+    bounce: { y: -4 },
+    pulse: { scale: 1.05 },
+    scale: { scale: 1.05 },
+    slide: { x: -4 },
+    fade: { opacity: 0.9 },
   };
 
   return (
-    <button
+    <motion.button
       ref={elementRef as React.RefObject<HTMLButtonElement>}
-      className={`transition-all ease-out ${className} ${getAnimationClasses()} ${getHoverClasses()}`}
-      style={{ transitionDuration: `${duration}ms` }}
+      className={className}
+      initial="hidden"
+      animate={isVisible ? "visible" : "hidden"}
+      variants={variants[animation]}
+      transition={{ duration: duration / 1000, delay: delay / 1000, ease: 'easeOut' }}
+      whileHover={whileHover[animation]}
+      style={{ willChange: 'opacity, transform' }}
       {...props}
     >
       {children}
-    </button>
+    </motion.button>
   );
 };
 

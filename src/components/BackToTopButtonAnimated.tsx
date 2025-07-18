@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface BackToTopButtonAnimatedProps {
   threshold?: number; // Ngưỡng hiển thị nút (pixel)
@@ -57,12 +58,21 @@ const BackToTopButtonAnimated: React.FC<BackToTopButtonAnimatedProps> = ({
     return () => window.removeEventListener('scroll', onScroll);
   }, [threshold]);
 
-  // Hàm xử lý khi click nút
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: smooth ? 'smooth' : 'auto',
-    });
+  // Hàm cuộn mượt từng bước lên đầu trang (không dùng behavior: 'smooth')
+  const animateScrollToTop = () => {
+    const duration = 1200; // ms
+    const startY = window.scrollY;
+    const startTime = performance.now();
+    function step(now: number) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+      window.scrollTo(0, startY * (1 - ease));
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      }
+    }
+    requestAnimationFrame(step);
   };
 
   // Xác định màu sắc dựa trên props
@@ -96,38 +106,46 @@ const BackToTopButtonAnimated: React.FC<BackToTopButtonAnimatedProps> = ({
   };
 
   return (
-    <button
-      onClick={scrollToTop}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className={`fixed bottom-6 right-6 p-3 text-white shadow-lg transition-all duration-300 z-50 flex items-center justify-center focus:outline-none ${
-        isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75 pointer-events-none'
-      } ${getColorClasses()} ${getShapeClasses()} ${className}`}
-      aria-label="Quay lại đầu trang"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className={`h-6 w-6 transition-transform duration-300 ${isHovered ? '-translate-y-1' : ''} ${
-          showText ? 'mr-2' : ''
-        }`}
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M5 10l7-7m0 0l7 7m-7-7v18"
-        />
-      </svg>
-      {showText && <span>{customText}</span>}
-      
-      {/* Hiệu ứng gợn sóng khi hover */}
-      <span className={`absolute inset-0 rounded-full bg-white opacity-30 scale-0 transition-transform duration-500 ${
-        isHovered ? 'scale-150 opacity-0' : ''
-      }`}></span>
-    </button>
+    <AnimatePresence>
+      {isVisible && (
+        <motion.button
+          key="back-to-top-animated"
+          initial={{ opacity: 0, scale: 0.7, y: 40 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.7, y: 40 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          onClick={animateScrollToTop}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          className={`fixed bottom-6 right-6 p-3 text-white shadow-lg transition-all duration-300 z-50 flex items-center justify-center focus:outline-none overflow-hidden ${
+            isVisible ? '' : 'pointer-events-none'
+          } ${getColorClasses()} ${getShapeClasses()} ${className}`}
+          aria-label="Quay lại đầu trang"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={`h-6 w-6 transition-transform duration-300 ${isHovered ? '-translate-y-1 scale-110' : ''} ${
+              showText ? 'mr-2' : ''
+            }`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 10l7-7m0 0l7 7m-7-7v18"
+            />
+          </svg>
+          {showText && <span>{customText}</span>}
+          {/* Ripple effect */}
+          <span className={`absolute inset-0 rounded-full bg-white opacity-30 scale-0 transition-transform duration-500 pointer-events-none ${
+            isHovered ? 'scale-150 opacity-0' : ''
+          }`}></span>
+        </motion.button>
+      )}
+    </AnimatePresence>
   );
 };
 

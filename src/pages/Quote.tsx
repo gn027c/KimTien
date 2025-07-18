@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ServiceProcess from '../components/ServiceProcess';
+import { useLoadingOverlay } from '../context/LoadingOverlayContext';
 
-const BaoGiaPage: React.FC = () => {
+const QuotePage: React.FC = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const productFromQuery = query.get('product') || '';
@@ -15,12 +16,21 @@ const BaoGiaPage: React.FC = () => {
     note: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const { show } = useLoadingOverlay();
 
   useEffect(() => {
     if (productFromQuery) {
       setForm((prev) => ({ ...prev, product: productFromQuery }));
     }
   }, [productFromQuery]);
+
+  React.useEffect(() => {
+    // Nếu có ảnh local minh họa sản phẩm, load trước (ví dụ /imageProduct/...)
+    const images = [];
+    if (form.product && form.product.includes('/imageProduct/')) images.push(form.product);
+    if (images.length > 0) show(images);
+    // eslint-disable-next-line
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -29,7 +39,7 @@ const BaoGiaPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
-    // TODO: Gửi dữ liệu đến backend hoặc email
+    // TODO: Send data to backend or email
   };
 
   return (
@@ -46,13 +56,13 @@ const BaoGiaPage: React.FC = () => {
             <svg className="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2l4-4m6 2a9 9 0 11-18 0a9 9 0 0118 0z" />
             </svg>
-            <h2 className="text-2xl font-bold text-green-600 mb-2">Gửi yêu cầu thành công!</h2>
-            <p className="text-gray-600">Chúng tôi sẽ liên hệ lại với bạn trong thời gian sớm nhất.</p>
+            <h2 className="text-2xl font-bold text-green-600 mb-2">Yêu cầu báo giá đã được gửi thành công!</h2>
+            <p className="text-gray-600">Chúng tôi sẽ liên hệ với bạn sớm nhất có thể.</p>
           </div>
         ) : (
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Họ và tên <span className="text-red-500">*</span></label>
+              <label className="block text-gray-700 font-medium mb-1">Tên <span className="text-red-500">*</span></label>
               <input
                 type="text"
                 name="name"
@@ -60,7 +70,7 @@ const BaoGiaPage: React.FC = () => {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                placeholder="Nhập họ tên"
+                placeholder="Nhập tên"
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -84,7 +94,7 @@ const BaoGiaPage: React.FC = () => {
                   value={form.email}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  placeholder="Nhập email (không bắt buộc)"
+                  placeholder="Nhập email (tùy chọn)"
                 />
               </div>
             </div>
@@ -97,7 +107,7 @@ const BaoGiaPage: React.FC = () => {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                placeholder="VD: In hộp giấy, in catalogue, thiết kế logo..."
+                placeholder="Ví dụ: In hộp giấy, in catalogue, thiết kế logo..."
               />
             </div>
             <div>
@@ -120,7 +130,7 @@ const BaoGiaPage: React.FC = () => {
                 onChange={handleChange}
                 rows={3}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                placeholder="Yêu cầu chi tiết, quy cách, chất liệu, thời gian..."
+                placeholder="Chi tiết yêu cầu, thông số kỹ thuật, vật liệu, thời gian..."
               />
             </div>
             <button
@@ -132,7 +142,7 @@ const BaoGiaPage: React.FC = () => {
           </form>
         )}
       </div>
-      {/* Quy trình làm việc */}
+      {/* Quy trình dịch vụ */}
       <div className="w-full mt-16">
         <ServiceProcess />
       </div>
@@ -140,4 +150,4 @@ const BaoGiaPage: React.FC = () => {
   );
 };
 
-export default BaoGiaPage; 
+export default QuotePage; 
