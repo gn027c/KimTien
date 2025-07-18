@@ -854,3 +854,58 @@ html {
     transform: translateY(-6px) scale(1.01);
   }
 }
+
+/* Animation cho modal */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.3s ease-out forwards;
+}
+
+/* [AI edited] Custom scrollbar for modal */
+.modal-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  background: transparent;
+}
+.modal-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #60a5fa 40%, #34d399 100%);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(52, 211, 153, 0.15);
+  border: 2px solid rgba(255,255,255,0.5);
+}
+.modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #2563eb 40%, #059669 100%);
+}
+.modal-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.3);
+  border-radius: 16px;
+}
+
+/* Firefox */
+.modal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #60a5fa #e0f2fe;
+}
+
+/* [AI edited] Hide scrollbar for modal */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Add scroll-margin-top to heading elements for better scrolling with fixed header */
+h1, h2, h3, section {
+  scroll-margin-top: 80px;
+}

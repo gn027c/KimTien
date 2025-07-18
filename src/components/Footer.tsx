@@ -1,96 +1,136 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook, Clock } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook, Instagram, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
+  const year = new Date().getFullYear();
+
   return (
-    <footer id="contact" className="bg-gray-900 text-white py-16" data-aos="fade-in">
+    <footer id="contact" className="bg-gray-900 text-white pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="grid grid-cols-12 gap-6 lg:gap-8">
           {/* Company Info */}
-          <div className="sm:col-span-2 lg:col-span-2" data-aos="fade-right">
+          <div className="col-span-12 md:col-span-4">
             <div className="flex items-center space-x-3 mb-6">
               <img
                 src="/kimtienlogo_small.png"
                 alt="Kim Tiền Logo"
-                className="h-8 sm:h-10 w-auto"
+                className="h-10 w-auto"
               />
               <div className="flex flex-col">
-                <span className="text-xl sm:text-2xl font-bold">Kim Tiền</span>
+                <span className="text-2xl font-bold">Kim Tiền</span>
                 <span className="text-xs text-red-400 font-medium">Kết nối thành công - Vươn tầm cao mới</span>
               </div>
             </div>
             
-            <p className="text-sm sm:text-base text-gray-300 leading-relaxed mb-6 sm:mb-8 max-w-md" data-aos="fade-up" data-aos-delay="100">
-              Nhà cung cấp hàng đầu các giải pháp bao bì và thiết kế cao cấp cho khách hàng doanh nghiệp.
-              Chúng tôi kết hợp thiết kế sáng tạo với chất lượng đặc biệt để nâng tầm sự hiện diện thương hiệu của bạn.
+            <p className="text-gray-300 leading-relaxed mb-6 max-w-md">
+              Nhà cung cấp hàng đầu các giải pháp in ấn và thiết kế bao bì cao cấp cho doanh nghiệp. 
+              Chúng tôi kết hợp thiết kế sáng tạo với chất lượng đặc biệt để nâng tầm thương hiệu của bạn.
             </p>
             
             <div className="space-y-4">
-              <div className="flex items-center space-x-3 transition-transform duration-300 hover:scale-105" data-aos="fade-up" data-aos-delay="200">
-                <Phone className="h-4 w-4 sm:h-5 sm:w-5 text-red-500" />
-                <span className="text-gray-300 text-sm sm:text-base">+84 919.535.525</span>
+              <div className="flex items-center space-x-3">
+                <Phone className="h-5 w-5 text-blue-500" />
+                <span className="text-gray-300">+84 919.535.525</span>
               </div>
-              <div className="flex items-center space-x-3 transition-transform duration-300 hover:scale-105" data-aos="fade-up" data-aos-delay="300">
-                <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-red-500" />
-                <span className="text-gray-300 text-sm sm:text-base">kimtien@kimtienposm.com</span>
+              <div className="flex items-center space-x-3">
+                <Mail className="h-5 w-5 text-blue-500" />
+                <span className="text-gray-300">kimtien@kimtienposm.com</span>
               </div>
-              <div className="flex items-center space-x-3 transition-transform duration-300 hover:scale-105" data-aos="fade-up" data-aos-delay="400">
-                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-red-500" />
-                <span className="text-gray-300 text-sm sm:text-base">8h - 17h (Thứ 2 - Thứ 7)</span>
+              <div className="flex items-center space-x-3">
+                <Clock className="h-5 w-5 text-blue-500" />
+                <span className="text-gray-300">8h - 17h (Thứ 2 - Thứ 7)</span>
               </div>
+            </div>
+            
+            {/* Social Links */}
+            <div className="flex space-x-4 mt-6">
+              <a href="#" className="bg-gray-800 hover:bg-blue-600 p-2 rounded-full transition-colors duration-300">
+                <Facebook className="h-5 w-5" />
+              </a>
+              <a href="#" className="bg-gray-800 hover:bg-blue-400 p-2 rounded-full transition-colors duration-300">
+                <Twitter className="h-5 w-5" />
+              </a>
+              <a href="#" className="bg-gray-800 hover:bg-pink-600 p-2 rounded-full transition-colors duration-300">
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a href="#" className="bg-gray-800 hover:bg-blue-700 p-2 rounded-full transition-colors duration-300">
+                <Linkedin className="h-5 w-5" />
+              </a>
             </div>
           </div>
 
-          {/* Services */}
-          <div data-aos="fade-up" data-aos-delay="100">
-            <h3 className="text-base sm:text-lg font-bold mb-4 sm:mb-6">Dịch Vụ</h3>
+          {/* Sitemap */}
+          <div className="col-span-6 md:col-span-2">
+            <h3 className="text-lg font-bold mb-4 text-blue-400">Trang chính</h3>
             <ul className="space-y-3">
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors duration-300 text-sm sm:text-base">Thiết Kế Bao Bì Tùy Chỉnh</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors duration-300 text-sm sm:text-base">Nhận Diện Thương Hiệu</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors duration-300 text-sm sm:text-base">Sản Xuất & Gia Công</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors duration-300 text-sm sm:text-base">Logistics & Thực Hiện</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors duration-300 text-sm sm:text-base">Giải Pháp Bền Vững</a></li>
+              <li><Link to="/" className="text-gray-300 hover:text-white transition-colors duration-300">Trang chủ</Link></li>
+              <li><Link to="/dich-vu" className="text-gray-300 hover:text-white transition-colors duration-300">Dịch vụ</Link></li>
+              <li><Link to="/du-an" className="text-gray-300 hover:text-white transition-colors duration-300">Dự án</Link></li>
+              <li><Link to="/ve-chung-toi" className="text-gray-300 hover:text-white transition-colors duration-300">Về chúng tôi</Link></li>
+              <li><Link to="/blog" className="text-gray-300 hover:text-white transition-colors duration-300">Blog</Link></li>
+              <li><Link to="/lien-he" className="text-gray-300 hover:text-white transition-colors duration-300">Liên hệ</Link></li>
+            </ul>
+          </div>
+
+          {/* Hỗ trợ */}
+          <div className="col-span-6 md:col-span-2">
+            <h3 className="text-lg font-bold mb-4 text-green-400">Hỗ trợ khách hàng</h3>
+            <ul className="space-y-3">
+              <li><Link to="/huong-dan-dat-hang" className="text-gray-300 hover:text-white transition-colors duration-300">Hướng dẫn đặt hàng</Link></li>
+              <li><Link to="/giao-hang-van-chuyen" className="text-gray-300 hover:text-white transition-colors duration-300">Giao hàng và vận chuyển</Link></li>
+              <li><Link to="/chinh-sach-bao-hanh" className="text-gray-300 hover:text-white transition-colors duration-300">Chính sách bảo hành</Link></li>
+            </ul>
+            
+            <h3 className="text-lg font-bold mb-4 mt-8 text-yellow-400">Chính sách</h3>
+            <ul className="space-y-3">
+              <li><Link to="/thoa-thuan-su-dung" className="text-gray-300 hover:text-white transition-colors duration-300">Thoả thuận sử dụng</Link></li>
+              <li><Link to="/chinh-sach-bao-mat" className="text-gray-300 hover:text-white transition-colors duration-300">Chính sách bảo mật</Link></li>
+              <li><Link to="/chinh-sach" className="text-gray-300 hover:text-white transition-colors duration-300">Chính sách & hỗ trợ khách hàng</Link></li>
             </ul>
           </div>
 
           {/* Locations */}
-          <div data-aos="fade-up" data-aos-delay="200">
-            <h3 className="text-base sm:text-lg font-bold mb-4 sm:mb-6">Địa Điểm</h3>
-            <div className="space-y-4 text-sm">
-              <div className="transition-transform duration-300 hover:scale-105">
-                <div className="text-white font-semibold mb-1 text-sm sm:text-base">Văn Phòng:</div>
-                <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('100/1/3 Đường An Phú Đông 25, An Phú Đông, Quận 12, Hồ Chí Minh 71500, Việt Nam')}`} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-red-500 transition-colors duration-300">100/1/3 Đường An Phú Đông 25, P. An Phú Đông, Q.12, TP.HCM</a>
+          <div className="col-span-12 md:col-span-2">
+            <h3 className="text-lg font-bold mb-4 text-purple-400">Địa điểm</h3>
+            <div className="space-y-4">
+              <div>
+                <div className="text-white font-medium mb-1">Văn phòng:</div>
+                <a 
+                  href="https://maps.app.goo.gl/qF3XbKXFW3MS9Aun6" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-300 hover:text-white transition-colors duration-300 flex items-start"
+                >
+                  <MapPin className="h-5 w-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>81/2 Đường An Phú Đông 25, P. An Phú Đông, Q.12, TP.HCM</span>
+                </a>
               </div>
-              <div className="transition-transform duration-300 hover:scale-105">
-                <div className="text-white font-semibold mb-1 text-sm sm:text-base">Xưởng Thành Phẩm:</div>
-                <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('100/1/3 Đường An Phú Đông 25, P. An Phú Đông, Q.12, TP.HCM')}`} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-red-500 transition-colors duration-300">100/1/3 Đường An Phú Đông 25, P. An Phú Đông, Q.12, TP.HCM</a>
-              </div>
-              <div className="transition-transform duration-300 hover:scale-105">
-                <div className="text-white font-semibold mb-1 text-sm sm:text-base">Phân Xưởng Sắt:</div>
-                <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('E15/19B Ấp 5, Kênh Trung Ương, Vĩnh Lộc B, Bình Chánh, TP.HCM')}`} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-red-500 transition-colors duration-300">E15/19B Ấp 5, Kênh Trung Ương, Vĩnh Lộc B, Bình Chánh, TP.HCM</a>
+              <div>
+                <div className="text-white font-medium mb-1">Xưởng sản xuất:</div>
+                <a 
+                  href="https://maps.app.goo.gl/pgUG7co2PMre3iFo6" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-300 hover:text-white transition-colors duration-300 flex items-start"
+                >
+                  <MapPin className="h-5 w-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>100/1/3 Đường An Phú Đông 25, P. An Phú Đông, Q.12, TP.HCM</span>
+                </a>
               </div>
             </div>
           </div>
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-800 pt-6 sm:pt-8 mt-8 sm:mt-12" data-aos="fade-up" data-aos-delay="300">
+        <div className="border-t border-gray-800 pt-8 mt-12">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-gray-400 text-xs sm:text-sm mb-4 md:mb-0 text-center md:text-left">
-              © 2024 Kim Tiền. Tất cả quyền được bảo lưu. | Chính Sách Bảo Mật | Điều Khoản Dịch Vụ
+            <div className="text-gray-400 mb-4 md:mb-0 text-center md:text-left">
+              © {year} Kim Tiền. Tất cả quyền được bảo lưu.
             </div>
             
-            {/* Social Links */}
-            <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-red-500 transition-transform duration-300 hover:scale-125">
-                <Linkedin className="h-4 w-4 sm:h-5 sm:w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-red-500 transition-transform duration-300 hover:scale-125">
-                <Twitter className="h-4 w-4 sm:h-5 sm:w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-red-500 transition-transform duration-300 hover:scale-125">
-                <Facebook className="h-4 w-4 sm:h-5 sm:w-5" />
-              </a>
+            <div className="text-gray-500 text-sm">
+              Thiết kế bởi <a href="#" className="text-blue-400 hover:text-blue-300">kimtienposm.com</a>
             </div>
           </div>
         </div>
